@@ -9,18 +9,31 @@ defineProps<HomeListProps>();
 </script>
 
 <template>
-  <div>
-    <template v-for="user in users">
-      <HomeListItem :user="user" />
-      <br />
-    </template>
+  <div class="listContainer">
+    <table>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Id</th>
+      </tr>
+      <template v-for="user in users">
+        <HomeListItem :user="user" />
+      </template>
+    </table>
   </div>
 </template>
 
 <style scoped>
-.header {
+.listContainer {
   width: 100%;
-  height: 300px;
-  background-color: aqua;
+  display: flex;
+  justify-content: center;
+}
+
+.listContainer > table {
+  width: 800px;
+  border-collapse: separate;
+  border-spacing: 20px;
+  text-align: left;
 }
 </style>

@@ -2,20 +2,23 @@
 import type { UserAPI } from '@/api/users.api';
 
 interface HomeListItemProps {
-  user: UserAPI
+  user: UserAPI;
 }
 defineProps<HomeListItemProps>();
 </script>
 
 <template>
-    <div>
-    <span>{{user.firstName}}</span>
-    <span>{{user.firstName}}</span>
-    <span>{{user.firstName}}</span>
-    <span>{{user.firstName}}</span>
-    </div>
+  <tr class="listItem">
+    <td>{{ `${user.firstName} ${user.lastName}` }}</td>
+    <td>{{ user.email }}</td>
+    <td>{{ user.id }}</td>
+  </tr>
 </template>
 
 <style scoped>
+.listItem {
+}
 
+.listItem > td {
+}
 </style>
