@@ -27,24 +27,24 @@ export const mock: UserAPI[] = [
         id: 2,
         nfcCardId: '4548664',
         firstName: 'Jozo',
-        lastName: 'Cipkala',
-        email: 'adamcipkala@gmail.com',
+        lastName: 'Bob',
+        email: 'Jozo@gmail.com',
         role: 1
     },
     {
         id: 3,
         nfcCardId: '4548664',
         firstName: 'Martin',
-        lastName: 'Cipkala',
-        email: 'adamcipkala@gmail.com',
+        lastName: 'Simon',
+        email: 'Martin@gmail.com',
         role: 1
     },
     {
         id: 4,
         nfcCardId: '4548664',
         firstName: 'Mo',
-        lastName: 'Cipkala',
-        email: 'adamcipkala@gmail.com',
+        lastName: 'Mo',
+        email: 'momo@gmail.com',
         role: 1
     }
 ]
