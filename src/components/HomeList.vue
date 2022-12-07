@@ -36,4 +36,8 @@ defineProps<HomeListProps>();
   border-spacing: 20px;
   text-align: left;
 }
+
+.listContainer > table th {
+  padding-left: 20px;
+}
 </style>
