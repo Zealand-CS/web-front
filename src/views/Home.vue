@@ -68,7 +68,6 @@ export default defineComponent({
     font-weight: 100;
     width: 60px;
   }
-  
   label {
     margin-right: 10px;
     margin-left: 10px;
