@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { UserAPI } from '@/api/users.api';
-import HomeListItem from './HomeListItem.vue';
+import HomeListItem from '../components/HomeListItem.vue';
 
 interface HomeListProps {
   users: UserAPI[];
