@@ -16,7 +16,7 @@ defineProps<HomeListItemProps>();
     </td>
     <td>{{ user.email }}</td>
     <td>{{ user.id }}</td>
-    <td><span>X</span></td>
+    <td><span>&#x2718;</span></td>
   </tr>
 </template>
 

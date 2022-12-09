@@ -11,59 +11,76 @@ export default defineComponent({
   setup() {
     const users = ref<UserAPI[]>(mock);
 
-    const selectedFilter = ref<string | null>(null);
-    const searchQuery = ref('');
-
-    const filterCriteria = [
-      { id: 1, key: 'id', label: 'ID' },
-      { id: 2, key: 'email', label: 'Email' },
-      { id: 3, key: 'firstName', label: 'First Name' },
-      { id: 4, key: 'lastName', label: 'Last Name' }
-    ];
-
-    const filterData = (data: UserAPI[], selectedFilter: string | null, searchQuery: string): UserAPI[] => {
-      if (!selectedFilter) {
-        return data;
-      }
-
-      return data.filter(item => {
-        if (selectedFilter !== null) {
-          const filterValue = (item as any)[selectedFilter];
-          return filterValue.toString().toLowerCase().includes(searchQuery.toLowerCase());
-        }
-
-        return false;
-      });
-    };
+    const idFilter = ref('');
+    const emailFilter = ref('');
+    const nameFilter = ref('');
 
     const searchResults = computed(() => {
-      return filterData(mock, selectedFilter.value, searchQuery.value);
+      const filteredUsers = mock.filter(user => {
+        return (
+          user.id.toString().toLowerCase().includes(idFilter.value.toLowerCase()) &&
+          user.email.toLowerCase().includes(emailFilter.value.toLowerCase()) &&
+          (user.firstName.toLowerCase() + ' ' + user.lastName.toLowerCase()).includes(nameFilter.value.toLowerCase())
+        );
+      });
+
+      return filteredUsers;
     });
 
-    return { users, searchResults, selectedFilter, searchQuery, filterCriteria, filterData };
+    return { users, searchResults, idFilter, emailFilter, nameFilter };
   },
 });
 </script>
 
-
 <template>
-  <div>
-    <h1>Home</h1>
+  <h1>Filters</h1>
+  <div style="text-align: center">
+    <div>
+      <label>Name</label>
+      <input class="filter-input" v-model="nameFilter" />
 
-    <label>Filter by:
-      <select v-model="selectedFilter">
-        <option value="null" selected>---</option>
-        <option v-for="criteria in filterCriteria" :value="criteria.key">
-          {{ criteria.label }}
-        </option>
-      </select>
-    </label>
+      <label>Email</label>
+      <input class="filter-input" v-model="emailFilter" />
 
-    <label>Search:
-      <input v-model="searchQuery" />
-    </label>
+      <label>ID</label>
+      <input class="filter-input-id" v-model="idFilter" />
 
+      <label for="in-progress">In progress</label>
+      <input type="checkbox" id="in-progress" />
+
+      <button class="filter-input add-button">Add User</button>
+    </div>
+    <br>
+    <hr>
     <HomeList :users="searchResults" />
   </div>
 </template>
+
+<style>
+  .filter-input {
+    border-radius: 10px;
+    padding: 6px 10px;
+    font-weight: 100;
+  }
+  .filter-input-id {
+    border-radius: 10px;
+    padding: 6px 20px;
+    font-weight: 100;
+    width: 60px;
+  }
+  
+  label {
+    margin-right: 10px;
+    margin-left: 10px;
+  }
+  .add-button {
+  border-color: green ;
+  background-color: white;
+  margin-left: 20px;
+}
+</style>
+
+
+
+
 
