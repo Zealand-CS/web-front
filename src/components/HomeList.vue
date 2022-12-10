@@ -3,7 +3,7 @@ import type { UserAPI } from '@/api/users.api';
 import HomeListItem from './HomeListItem.vue';
 
 interface HomeListProps {
-  users: UserAPI[];
+  users: UserAPI[] | undefined;
 }
 defineProps<HomeListProps>();
 </script>

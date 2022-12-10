@@ -1,7 +1,7 @@
 <script lang="ts">
-import { defineComponent, ref, computed } from 'vue';
+import { defineComponent, ref, computed, onMounted } from 'vue';
 import HomeList from '../components/HomeList.vue';
-import { mock, type UserAPI } from '@/api/users.api';
+import { getAllUsers, mock, type UserAPI } from '@/api/users.api';
 
 export default defineComponent({
   name: 'Home',
@@ -9,14 +9,16 @@ export default defineComponent({
     HomeList,
   },
   setup() {
-    const users = ref<UserAPI[]>(mock);
+    const result = ref<UserAPI[] | undefined>();
+
+    onMounted(async () => (result.value = await getAllUsers()));
 
     const idFilter = ref('');
     const emailFilter = ref('');
     const nameFilter = ref('');
 
     const searchResults = computed(() => {
-      const filteredUsers = mock.filter(user => {
+      const filteredUsers = result.value?.filter(user => {
         return (
           user.id.toString().toLowerCase().includes(idFilter.value.toLowerCase()) &&
           user.email.toLowerCase().includes(emailFilter.value.toLowerCase()) &&
@@ -27,7 +29,7 @@ export default defineComponent({
       return filteredUsers;
     });
 
-    return { users, searchResults, idFilter, emailFilter, nameFilter };
+    return { searchResults, idFilter, emailFilter, nameFilter };
   },
 });
 </script>
@@ -50,37 +52,32 @@ export default defineComponent({
 
       <button class="filter-input add-button">Add User</button>
     </div>
-    <br>
-    <hr>
+    <br />
+    <hr />
     <HomeList :users="searchResults" />
   </div>
 </template>
 
 <style>
-  .filter-input {
-    border-radius: 10px;
-    padding: 6px 10px;
-    font-weight: 100;
-  }
-  .filter-input-id {
-    border-radius: 10px;
-    padding: 6px 20px;
-    font-weight: 100;
-    width: 60px;
-  }
-  
-  label {
-    margin-right: 10px;
-    margin-left: 10px;
-  }
-  .add-button {
-  border-color: green ;
+.filter-input {
+  border-radius: 10px;
+  padding: 6px 10px;
+  font-weight: 100;
+}
+.filter-input-id {
+  border-radius: 10px;
+  padding: 6px 20px;
+  font-weight: 100;
+  width: 60px;
+}
+
+label {
+  margin-right: 10px;
+  margin-left: 10px;
+}
+.add-button {
+  border-color: green;
   background-color: white;
   margin-left: 20px;
 }
 </style>
-
-
-
-
-
