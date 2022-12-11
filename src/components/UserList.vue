@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { UserAPI } from '@/api/users.api';
-import HomeListItem from './HomeListItem.vue';
+import UserListItem from './UserListItem.vue';
 
 interface HomeListProps {
   users: UserAPI[] | undefined;
@@ -12,13 +12,14 @@ defineProps<HomeListProps>();
   <div class="tableContainer">
     <table>
       <tr>
-        <th>Name</th>
-        <th>Email</th>
+        <th>CheckIn</th>
+        <th>CheckOut</th>
+        <th>Time in Total</th>
         <th>Id</th>
         <th>Status</th>
       </tr>
       <template v-for="user in users">
-        <HomeListItem :user="user" />
+        <UserListItem :user="user" />
       </template>
     </table>
   </div>

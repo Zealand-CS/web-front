@@ -9,9 +9,16 @@ export interface UserAPI {
   role: number;
 }
 
+export interface NewUser {
+  lastName: string;
+  firstName: string;
+  email: string;
+}
+
+export interface UpdatedUser extends NewUser {}
 const axiosInstance = axios.create({
   //TODO:
-  baseURL: 'https://shifttrackerapi.azurewebsites.net',
+  baseURL: 'https://shifttrackerapi.azurewebsites.net/users',
 });
 
 export const mock: UserAPI[] = [
@@ -51,7 +58,7 @@ export const mock: UserAPI[] = [
 
 export async function getAllUsers(): Promise<UserAPI[] | undefined> {
   try {
-    const { data } = await axiosInstance.get<UserAPI[]>(`/users`);
+    const { data } = await axiosInstance.get<UserAPI[]>(`/`);
     return data;
   } catch (error) {
     console.error(error);
@@ -67,7 +74,16 @@ export async function getUser(userId: number): Promise<UserAPI | undefined> {
   }
 }
 
-export async function updateUser(userId: number, user: UserAPI): Promise<UserAPI | undefined> {
+export async function addUser(user: NewUser): Promise<UserAPI | undefined> {
+  try {
+    const { data } = await axiosInstance.post<UserAPI>('/', user);
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export async function updateUser(userId: number, user: UpdatedUser): Promise<UserAPI | undefined> {
   try {
     const { data } = await axiosInstance.put<any>(`/${userId}`, user);
     return data;

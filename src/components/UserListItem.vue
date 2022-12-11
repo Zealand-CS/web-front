@@ -16,8 +16,8 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const router = useRouter();
-    const redirectToUser = () => router.push({ name: 'user', params: { id: props.user.id } });
+    const route = useRouter();
+    const redirectToUser = () => route.push({ name: 'user', params: { id: props.user.id } });
     return { redirectToUser };
   },
 });
@@ -25,11 +25,10 @@ export default defineComponent({
 
 <template>
   <tr class="tableItem" @click="redirectToUser">
-    <td>
-      {{ `${user.firstName} ${user.lastName}` }}
-    </td>
-    <td>{{ user.email }}</td>
-    <td>{{ user.id }}</td>
+    <td>time</td>
+    <td>time</td>
+    <td>time</td>
+    <td>id</td>
     <td>status</td>
   </tr>
 </template>

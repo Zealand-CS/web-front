@@ -4,31 +4,30 @@ import { RouterLink, RouterView } from 'vue-router';
 
 <template>
   <header>
-    <div>
-      <nav>
-        <RouterLink to="/" class="nav-link">Home</RouterLink>
-        <!-- <RouterLink :to="{ name: 'user', params: { id: 4 } }" class="nav-link">User</RouterLink> -->
-      </nav>
-    </div>
+    <RouterLink to="/" class="nav-link"><h1>ShiftTracker</h1></RouterLink>
   </header>
-
   <RouterView />
 </template>
 
 <style>
-  .nav-link {
-    font-size: 20px;
-    font-weight: bold;
-    color: #333;
-    margin-right: 10px;
-  }
+header {
+  padding: 10px;
+  text-align: center;
+  margin-bottom: 25px;
+}
+header a {
+  text-decoration: none;
+  color: black;
+}
 
-  .nav-link:last-child {
-    margin-right: 0;
-  }
+.loading {
+  width: 100%;
+  text-align: center;
+  font-weight: 500;
+  margin-top: 20px;
+}
 
-  .nav-link:hover,
-  .nav-link.active {
-    color: #000;
-  }
+.loading > span {
+  font-weight: 500;
+}
 </style>
