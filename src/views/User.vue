@@ -195,8 +195,6 @@ export default defineComponent({
       <span v-if="!shiftsPairs">Loading ...</span>
     </div>
     <ShiftsList v-if="shifts" :shifts="shiftsPairs" />
-    <!-- <div>{{ shiftsPairs }}</div> -->
-    <button @click="test">test</button>
   </div>
 </template>
 
