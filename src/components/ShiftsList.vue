@@ -1,23 +1,26 @@
 <script setup lang="ts">
-import type { UserAPI } from '@/api/users.api';
-import HomeListItem from '../components/HomeListItem.vue';
+import type { ShiftAPI } from '@/api/shifts.api';
+import type { ShiftPair } from '@/views/User.vue';
+import ShiftsListItem from './ShiftsListItem.vue';
 
-interface HomeListProps {
-  users: UserAPI[] | undefined;
+interface ShiftsListProps {
+  shifts: ShiftPair[];
 }
-defineProps<HomeListProps>();
+defineProps<ShiftsListProps>();
 </script>
 
 <template>
   <div class="tableContainer">
     <table>
       <tr>
-        <th>Name</th>
-        <th>Email</th>
+        <th>CheckIn</th>
+        <th>CheckOut</th>
+        <th>Time in Total</th>
         <th>Id</th>
+        <th>Status</th>
       </tr>
-      <template v-for="user in users">
-        <HomeListItem :user="user" />
+      <template v-for="shift in shifts">
+        <ShiftsListItem :shift="shift" />
       </template>
     </table>
   </div>
@@ -31,7 +34,7 @@ defineProps<HomeListProps>();
 }
 
 .tableContainer > table {
-  width: 800px;
+  width: 900px;
   border-collapse: separate;
   border-spacing: 20px;
   text-align: left;
