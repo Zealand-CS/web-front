@@ -15,46 +15,13 @@ export interface NewUser {
   email: string;
 }
 
-export interface UpdatedUser extends NewUser {}
+export interface UpdatedUser extends NewUser {
+  nfcCardId: string;
+}
 const axiosInstance = axios.create({
   //TODO:
   baseURL: 'https://shifttrackerapi.azurewebsites.net/users',
 });
-
-export const mock: UserAPI[] = [
-  {
-    id: 1,
-    nfcCardId: '4548664',
-    firstName: 'Adam',
-    lastName: 'Cipkala',
-    email: 'adamcipkala@gmail.com',
-    role: 1,
-  },
-  {
-    id: 2,
-    nfcCardId: '4548664',
-    firstName: 'Jozo',
-    lastName: 'Bob',
-    email: 'Jozo@gmail.com',
-    role: 1,
-  },
-  {
-    id: 3,
-    nfcCardId: '4548664',
-    firstName: 'Martin',
-    lastName: 'Simon',
-    email: 'Martin@gmail.com',
-    role: 1,
-  },
-  {
-    id: 4,
-    nfcCardId: '4548664',
-    firstName: 'Mo',
-    lastName: 'Mo',
-    email: 'momo@gmail.com',
-    role: 1,
-  },
-];
 
 export async function getAllUsers(): Promise<UserAPI[] | undefined> {
   try {

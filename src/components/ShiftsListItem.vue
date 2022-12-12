@@ -1,35 +1,28 @@
 <script lang="ts">
+import type { ShiftAPI } from '@/api/shifts.api';
 import type { UserAPI } from '@/api/users.api';
+import type { ShiftPair } from '@/views/User.vue';
 import { computed, defineComponent, type PropType } from 'vue';
 import { useRouter } from 'vue-router';
-
-interface HomeListItemProps {
-  user: UserAPI;
-}
 
 // defineProps<HomeListItemProps>();
 export default defineComponent({
   props: {
-    user: {
+    shift: {
       required: true,
-      type: Object as PropType<UserAPI>,
+      type: Object as PropType<ShiftPair>,
     },
-  },
-  setup(props) {
-    const route = useRouter();
-    const redirectToUser = () => route.push({ name: 'user', params: { id: props.user.id } });
-    return { redirectToUser };
   },
 });
 </script>
 
 <template>
-  <tr class="tableItem" @click="redirectToUser">
-    <td>time</td>
-    <td>time</td>
-    <td>time</td>
-    <td>id</td>
-    <td>status</td>
+  <tr class="tableItem">
+    <td>{{ shift.checkIn }}</td>
+    <td>{{ shift.checkOut }}</td>
+    <td>{{ shift.totalTime }}</td>
+    <td>{{ shift.id }}</td>
+    <td>{{ shift.status }}</td>
   </tr>
 </template>
 
@@ -40,7 +33,6 @@ export default defineComponent({
   position: relative;
   border-radius: 10px;
   box-shadow: 2px 2px 7px rgba(0, 0, 0, 0.25);
-  cursor: pointer;
 }
 
 .tableItem > td {

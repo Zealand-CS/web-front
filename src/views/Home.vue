@@ -1,7 +1,7 @@
 <script lang="ts">
 import { defineComponent, ref, computed, onMounted } from 'vue';
 import HomeList from '../components/HomeList.vue';
-import { getAllUsers, addUser, deleteUser, mock, type UserAPI, type NewUser } from '@/api/users.api';
+import { getAllUsers, addUser, deleteUser, type UserAPI, type NewUser } from '@/api/users.api';
 
 const NEW_USER_EMPTY = {
   firstName: '',
@@ -124,7 +124,7 @@ export default defineComponent({
     <div class="loading">
       <span v-if="!searchResults">Loading ...</span>
     </div>
-    <HomeList v-if="searchResults" :users="result" :removeUser="removeUser" />
+    <HomeList v-if="searchResults" :users="searchResults" :removeUser="removeUser" />
   </div>
 </template>
 
