@@ -78,20 +78,18 @@ export default defineComponent({
     </div>
     <div class="filters">
       <div>
-        <label>Name</label>
-        <input class="filter-input" v-model="userFilter.name" />
-      </div>
-      <div>
-        <label>Email</label>
-        <input class="filter-input" v-model="userFilter.email" />
-      </div>
-      <div>
-        <label>ID</label>
-        <input class="filter-input-id" v-model="userFilter.id" />
-      </div>
-      <div>
-        <label for="in-progress">In progress</label>
-        <input type="checkbox" id="in-progress" />
+        <div>
+          <label>Name</label>
+          <input class="filter-input" v-model="userFilter.name" />
+        </div>
+        <div>
+          <label>Email</label>
+          <input class="filter-input" v-model="userFilter.email" />
+        </div>
+        <div>
+          <label>ID</label>
+          <input class="filter-input-id" v-model="userFilter.id" />
+        </div>
       </div>
       <div class="add-buttonWrapper">
         <button v-if="!showAddUserSection" class="add-button" @click="() => (showAddUserSection = !showAddUserSection)">
@@ -148,7 +146,7 @@ export default defineComponent({
   border-radius: 10px;
   padding: 6px 10px;
   border: 2px solid rgb(213, 213, 213);
-  width: 60px;
+  max-width: 60px;
 }
 
 .filter-input-id:focus {
@@ -205,6 +203,13 @@ label {
   max-width: 800px;
   display: flex;
   justify-content: space-between;
+}
+
+.filters > div > div {
+  display: flex;
+  margin-right: 20px;
+  flex-wrap: nowrap;
+  align-items: center;
 }
 
 .filters > div {

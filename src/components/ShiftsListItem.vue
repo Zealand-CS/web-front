@@ -1,11 +1,7 @@
 <script lang="ts">
-import type { ShiftAPI } from '@/api/shifts.api';
-import type { UserAPI } from '@/api/users.api';
 import type { ShiftPair } from '@/views/User.vue';
-import { computed, defineComponent, type PropType } from 'vue';
-import { useRouter } from 'vue-router';
+import { defineComponent, type PropType } from 'vue';
 
-// defineProps<HomeListItemProps>();
 export default defineComponent({
   props: {
     shift: {
@@ -22,14 +18,15 @@ export default defineComponent({
     <td>{{ shift.checkOut }}</td>
     <td>{{ shift.totalTime }}</td>
     <td>{{ shift.id }}</td>
-    <td>{{ shift.status }}</td>
+    <td class="pill">
+      <div class="pillActive" v-if="shift.status === 1">at work</div>
+      <div class="pillClosed" v-else>closed</div>
+    </td>
   </tr>
 </template>
 
 <style scoped>
 .tableItem {
-  /* line-height: 40px; */
-  /* height: 50px; */
   position: relative;
   border-radius: 10px;
   box-shadow: 2px 2px 7px rgba(0, 0, 0, 0.25);
@@ -52,5 +49,26 @@ export default defineComponent({
   z-index: 99;
   right: 30px;
   top: 20px;
+}
+
+.pill {
+  width: 150px;
+}
+
+.pillActive {
+  background-color: #ffc165;
+  text-align: center;
+  width: 80px;
+  border-radius: 20px;
+}
+
+.pillClosed {
+  background-color: #b5ff84;
+  text-align: center;
+  width: 80px;
+  border-radius: 20px;
+}
+
+.pillActive {
 }
 </style>

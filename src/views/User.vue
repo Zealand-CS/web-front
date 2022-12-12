@@ -2,7 +2,7 @@
 import { defineComponent, ref, computed, onMounted } from 'vue';
 import ShiftsList from '../components/ShiftsList.vue';
 import { deleteUser, type UserAPI, getUser, updateUser } from '@/api/users.api';
-import { getAllShifts, getShiftsById, type ShiftAPI } from '@/api/shifts.api';
+import { getShiftsById, type ShiftAPI } from '@/api/shifts.api';
 import { useRoute, useRouter } from 'vue-router';
 
 export interface ShiftPair {
@@ -11,6 +11,26 @@ export interface ShiftPair {
   totalTime: string;
   id: string;
   status: number;
+}
+
+function DateFormat(date: Date): string {
+  const day = date.getDate();
+  const month = date.getMonth() + 1;
+  const year = date.getFullYear();
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+
+  return `${day}/${month}/${year} ${hours}:${minutes}`;
+}
+
+function calculateTotalTime(start: Date, end: Date | null): string {
+  const difference = end !== null ? end.getTime() - start.getTime() : new Date().getTime() - start.getTime();
+
+  // tired of match two lines below, just copied it, it works
+  const hours = Math.floor((difference % 86400000) / 3600000);
+  const minutes = Math.ceil(((difference % 86400000) % 3600000) / 60000);
+
+  return `${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}`;
 }
 
 export default defineComponent({
@@ -83,27 +103,10 @@ export default defineComponent({
           },
           [[{}, {}]]
         )
-        .filter(pair => pair.length && Object.keys(pair[0]).length);
-
-      function DateFormat(date: Date): string {
-        const day = date.getDate();
-        const month = date.getMonth() + 1;
-        const year = date.getFullYear();
-        const hours = date.getHours();
-        const minutes = date.getMinutes();
-
-        return `${day}/${month}/${year} ${hours}:${minutes}`;
-      }
-
-      function calculateTotalTime(start: Date, end: Date | null): string {
-        const difference = end !== null ? end.getTime() - start.getTime() : new Date().getTime() - start.getTime();
-
-        // tired of match two lines below, just copied it, it works
-        const hours = Math.floor((difference % 86400000) / 3600000);
-        const minutes = Math.ceil(((difference % 86400000) % 3600000) / 60000);
-
-        return `${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}`;
-      }
+        .filter(pair => pair.length && Object.keys(pair[0]).length)
+        .sort((a: any, b: any) => {
+          return new Date(b[0].createdAt).getTime() - new Date(a[0].createdAt).getTime();
+        });
 
       return pairedShifts
         .map(pair => {
@@ -126,8 +129,7 @@ export default defineComponent({
             status: 0,
           };
         })
-        .filter(pair => pair)
-        .reverse();
+        .filter(pair => pair);
     });
     const test = () => console.log(shiftsPairs.value);
 

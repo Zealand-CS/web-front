@@ -34,7 +34,7 @@ defineProps<ShiftsListProps>();
 }
 
 .tableContainer > table {
-  width: 800px;
+  width: 900px;
   border-collapse: separate;
   border-spacing: 20px;
   text-align: left;
