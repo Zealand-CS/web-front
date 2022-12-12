@@ -30,7 +30,6 @@ export default defineComponent({
     </td>
     <td>{{ user.email }}</td>
     <td>{{ user.id }}</td>
-    <td>status</td>
   </tr>
 </template>
 

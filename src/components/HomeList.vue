@@ -15,7 +15,6 @@ defineProps<HomeListProps>();
         <th>Name</th>
         <th>Email</th>
         <th>Id</th>
-        <th>Status</th>
       </tr>
       <template v-for="user in users">
         <HomeListItem :user="user" />

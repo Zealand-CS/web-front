@@ -1,10 +1,23 @@
-<script setup lang="ts">
+<script lang="ts">
+import { defineComponent, onMounted, ref } from 'vue';
 import { RouterLink, RouterView } from 'vue-router';
+import { getQuote } from './api/quites.api';
+
+export default defineComponent({
+  name: 'Home',
+  setup() {
+    const quote = ref();
+    onMounted(async () => (quote.value = await getQuote()));
+
+    return { quote };
+  },
+});
 </script>
 
 <template>
   <header>
     <RouterLink to="/" class="nav-link"><h1>ShiftTracker</h1></RouterLink>
+    <span>{{ quote }}</span>
   </header>
   <RouterView />
 </template>
