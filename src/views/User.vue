@@ -49,6 +49,7 @@ export default defineComponent({
       firstName: user.value?.firstName || '',
       lastName: user.value?.lastName || '',
       email: user.value?.email || '',
+      nfcCardId: user.value?.nfcCardId || '',
     });
     const shifts = ref<ShiftAPI[] | undefined>();
 
@@ -58,6 +59,7 @@ export default defineComponent({
         firstName: user.value?.firstName || '',
         lastName: user.value?.lastName || '',
         email: user.value?.email || '',
+        nfcCardId: user.value?.nfcCardId || '',
       };
       shifts.value = await getShiftsById(userId);
     });
@@ -79,64 +81,62 @@ export default defineComponent({
       }
 
       if (!updatedUser.value.firstName || !updatedUser.value.lastName || !updatedUser.value.email) {
-    errorMessage.value = "Please fill out all fields";
-    return;
-  }
-  if (updatedUser.value.email.length > 50) {
-    errorMessage.value = "Email length can't be over 50 characters long";
-  }
-  if (updatedUser.value.email.length < 20) {
-    errorMessage.value = "Email length can't be over 50 characters long";
-  }
-  const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  if (!emailRegex.test(updatedUser.value.email)) {
-    errorMessage.value = "Please enter a valid email";
-    return;
-  }
+        errorMessage.value = 'Please fill out all fields';
+        return;
+      }
+      if (updatedUser.value.email.length > 50) {
+        errorMessage.value = "Email length can't be over 50 characters long";
+      }
+      if (updatedUser.value.email.length < 20) {
+        errorMessage.value = "Email length can't be over 50 characters long";
+      }
+      const emailRegex =
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      if (!emailRegex.test(updatedUser.value.email)) {
+        errorMessage.value = 'Please enter a valid email';
+        return;
+      }
 
-  if (updatedUser.value.firstName.length < 3 || updatedUser.value.firstName.length > 30) {
-    errorMessage.value = "First name must be between 3 and 30 characters long";
-    return;
-  }
-  if (updatedUser.value.lastName.length < 3 || updatedUser.value.lastName.length > 30) {
-    errorMessage.value = "Last name must be between 3 and 30 characters long";
-    return;
-  }
-  
-  const firstName = updatedUser.value.firstName;
-  const lastName = updatedUser.value.lastName;
-  const firstNameHasNumbers = /\d/.test(firstName);
-  const firstNameHasPunctuation = /[^a-zA-Z\d\s:]/.test(firstName);
-  const lastNameHasNumbers = /\d/.test(lastName);
-  const lastNameHasPunctuation = /[^a-zA-Z\d\s:]/.test(lastName);
-  if (firstNameHasPunctuation) {
-    errorMessage.value = "First name cannot punctuation";
-    return;
-  }
-  if (lastNameHasPunctuation) {
-    errorMessage.value = "Last name cannot punctuation";
-    return;
-  }
-  if (firstNameHasNumbers) {
-    errorMessage.value = "First name cannot contain numbers";
-    return;
-  }
-  if (lastNameHasNumbers ) {
-    errorMessage.value = "Last name cannot contain numbers";
-    return;
-  }
+      if (updatedUser.value.firstName.length < 3 || updatedUser.value.firstName.length > 30) {
+        errorMessage.value = 'First name must be between 3 and 30 characters long';
+        return;
+      }
+      if (updatedUser.value.lastName.length < 3 || updatedUser.value.lastName.length > 30) {
+        errorMessage.value = 'Last name must be between 3 and 30 characters long';
+        return;
+      }
 
-  errorMessage.value = '';
+      const firstName = updatedUser.value.firstName;
+      const lastName = updatedUser.value.lastName;
+      const firstNameHasNumbers = /\d/.test(firstName);
+      const firstNameHasPunctuation = /[^a-zA-Z\d\s:]/.test(firstName);
+      const lastNameHasNumbers = /\d/.test(lastName);
+      const lastNameHasPunctuation = /[^a-zA-Z\d\s:]/.test(lastName);
+      if (firstNameHasPunctuation) {
+        errorMessage.value = 'First name cannot punctuation';
+        return;
+      }
+      if (lastNameHasPunctuation) {
+        errorMessage.value = 'Last name cannot punctuation';
+        return;
+      }
+      if (firstNameHasNumbers) {
+        errorMessage.value = 'First name cannot contain numbers';
+        return;
+      }
+      if (lastNameHasNumbers) {
+        errorMessage.value = 'Last name cannot contain numbers';
+        return;
+      }
 
-      const { nfcCardId } = user.value;
+      errorMessage.value = '';
 
-      const newUser = await updateUser(userId, { ...updatedUser.value, nfcCardId });
+      const newUser = await updateUser(userId, { ...updatedUser.value });
       if (!newUser) {
         return;
       }
       user.value = newUser;
       showUpdateUserSection.value = false;
-      alert(`User ${newUser.firstName} updated successfully!`);
     };
 
     const shiftsPairs = computed(() => {
@@ -187,7 +187,17 @@ export default defineComponent({
     });
     const test = () => console.log(shiftsPairs.value);
 
-    return { user, removeUser, showUpdateUserSection, updatedUser, updateUserHandler, shifts, test, shiftsPairs, errorMessage };
+    return {
+      user,
+      removeUser,
+      showUpdateUserSection,
+      updatedUser,
+      updateUserHandler,
+      shifts,
+      test,
+      shiftsPairs,
+      errorMessage,
+    };
   },
 });
 </script>
@@ -212,6 +222,11 @@ export default defineComponent({
       <div>
         <label>ID:</label>
         <span>{{ user.id }}</span>
+      </div>
+
+      <div>
+        <label>NfcCardId:</label>
+        <span>{{ user.nfcCardId }}</span>
       </div>
 
       <div class="add-buttonWrapper">
@@ -240,8 +255,12 @@ export default defineComponent({
           <label>Email</label>
           <input class="filter-input" v-model="updatedUser.email" />
         </div>
+        <div>
+          <label>NfcCardId</label>
+          <input class="filter-input" v-model="updatedUser.nfcCardId" />
+        </div>
       </div>
-      <label style="color:red">{{errorMessage}}</label>
+      <label style="color: red">{{ errorMessage }}</label>
       <div>
         <button class="add-button" @click="updateUserHandler">Update User</button>
         <button class="remove-button" @click="removeUser">Remove User</button>
@@ -307,6 +326,10 @@ label {
   display: flex;
   justify-content: space-between;
   margin-bottom: 16px;
+}
+
+.addUserContainer > div:first-of-type > div:not(:last-child) {
+  margin-right: 16px;
 }
 
 .addUserContainer > div:last-of-type {
