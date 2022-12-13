@@ -30,6 +30,7 @@ export default defineComponent({
     </td>
     <td>{{ user.email }}</td>
     <td>{{ user.id }}</td>
+    <td>{{ user.nfcCardId ? user.nfcCardId : '-' }}</td>
   </tr>
 </template>
 

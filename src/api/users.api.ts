@@ -13,6 +13,7 @@ export interface NewUser {
   lastName: string;
   firstName: string;
   email: string;
+  nfcCardId: string;
 }
 
 export interface UpdatedUser extends NewUser {
