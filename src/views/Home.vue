@@ -43,7 +43,56 @@ export default defineComponent({
       return filteredUsers;
     });
 
+    const errorMessage = ref('');
     const addNewUser = async () => {
+  if (!newUser.value.firstName || !newUser.value.lastName || !newUser.value.email) {
+    errorMessage.value = "Please fill out all fields";
+    return;
+  }
+  if (newUser.value.email.length > 50) {
+    errorMessage.value = "Email length can't be over 50 characters long";
+  }
+  
+  const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  if (!emailRegex.test(newUser.value.email)) {
+    errorMessage.value = "Please enter a valid email";
+    return;
+  }
+
+  if (newUser.value.firstName.length < 3 || newUser.value.firstName.length > 30) {
+    errorMessage.value = "First name must be between 3 and 30 characters long";
+    return;
+  }
+  if (newUser.value.lastName.length < 3 || newUser.value.lastName.length > 30) {
+    errorMessage.value = "Last name must be between 3 and 30 characters long";
+    return;
+  }
+  
+  const firstName = newUser.value.firstName;
+  const lastName = newUser.value.lastName;
+  const firstNameHasNumbers = /\d/.test(firstName);
+  const firstNameHasPunctuation = /[^a-zA-Z\d\s:]/.test(firstName);
+  const lastNameHasNumbers = /\d/.test(lastName);
+  const lastNameHasPunctuation = /[^a-zA-Z\d\s:]/.test(lastName);
+  if (firstNameHasPunctuation) {
+    errorMessage.value = "First name cannot punctuation";
+    return;
+  }
+  if (lastNameHasPunctuation) {
+    errorMessage.value = "Last name cannot punctuation";
+    return;
+  }
+  if (firstNameHasNumbers) {
+    errorMessage.value = "First name cannot contain numbers";
+    return;
+  }
+  if (lastNameHasNumbers ) {
+    errorMessage.value = "Last name cannot contain numbers";
+    return;
+  }
+
+  errorMessage.value = ''; 
+
       const user = await addUser(newUser.value);
       if (!user) {
         return;
@@ -55,6 +104,7 @@ export default defineComponent({
         email: '',
       };
       showAddUserSection.value = false;
+      alert(`User ${user.firstName} added successfully!`);
     };
 
     const removeUser = async (userId: number) => {
@@ -66,7 +116,7 @@ export default defineComponent({
       result.value = result.value?.filter(user => user.id !== deletedUser.id);
     };
 
-    return { searchResults, userFilter, showAddUserSection, newUser, addNewUser, removeUser, result };
+    return { searchResults, userFilter, showAddUserSection, newUser, addNewUser, removeUser, result, errorMessage };
   },
 });
 </script>
@@ -103,17 +153,19 @@ export default defineComponent({
       <div>
         <div>
           <label>FirstName</label>
-          <input class="filter-input" v-model="newUser.firstName" />
+          <input class="filter-input" v-model="newUser.firstName" required />
         </div>
         <div>
           <label>LastName</label>
-          <input class="filter-input" v-model="newUser.lastName" />
+          <input class="filter-input" v-model="newUser.lastName" required/>
         </div>
         <div>
           <label>Email</label>
-          <input class="filter-input" v-model="newUser.email" />
+          <input class="filter-input" v-model="newUser.email" required />
         </div>
       </div>
+      <label style="color:red">{{errorMessage}}</label>
+
       <div>
         <button class="add-button" @click="addNewUser">Add</button>
       </div>

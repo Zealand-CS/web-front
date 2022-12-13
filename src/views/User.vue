@@ -71,10 +71,63 @@ export default defineComponent({
       }
       router.push({ name: 'home' });
     };
+
+    const errorMessage = ref('');
     const updateUserHandler = async () => {
       if (!user.value) {
         return;
       }
+
+      if (!updatedUser.value.firstName || !updatedUser.value.lastName || !updatedUser.value.email) {
+    errorMessage.value = "Please fill out all fields";
+    return;
+  }
+  if (updatedUser.value.email.length > 50) {
+    errorMessage.value = "Email length can't be over 50 characters long";
+  }
+  if (updatedUser.value.email.length < 20) {
+    errorMessage.value = "Email length can't be over 50 characters long";
+  }
+  const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  if (!emailRegex.test(updatedUser.value.email)) {
+    errorMessage.value = "Please enter a valid email";
+    return;
+  }
+
+  if (updatedUser.value.firstName.length < 3 || updatedUser.value.firstName.length > 30) {
+    errorMessage.value = "First name must be between 3 and 30 characters long";
+    return;
+  }
+  if (updatedUser.value.lastName.length < 3 || updatedUser.value.lastName.length > 30) {
+    errorMessage.value = "Last name must be between 3 and 30 characters long";
+    return;
+  }
+  
+  const firstName = updatedUser.value.firstName;
+  const lastName = updatedUser.value.lastName;
+  const firstNameHasNumbers = /\d/.test(firstName);
+  const firstNameHasPunctuation = /[^a-zA-Z\d\s:]/.test(firstName);
+  const lastNameHasNumbers = /\d/.test(lastName);
+  const lastNameHasPunctuation = /[^a-zA-Z\d\s:]/.test(lastName);
+  if (firstNameHasPunctuation) {
+    errorMessage.value = "First name cannot punctuation";
+    return;
+  }
+  if (lastNameHasPunctuation) {
+    errorMessage.value = "Last name cannot punctuation";
+    return;
+  }
+  if (firstNameHasNumbers) {
+    errorMessage.value = "First name cannot contain numbers";
+    return;
+  }
+  if (lastNameHasNumbers ) {
+    errorMessage.value = "Last name cannot contain numbers";
+    return;
+  }
+
+  errorMessage.value = '';
+
       const { nfcCardId } = user.value;
 
       const newUser = await updateUser(userId, { ...updatedUser.value, nfcCardId });
@@ -83,6 +136,7 @@ export default defineComponent({
       }
       user.value = newUser;
       showUpdateUserSection.value = false;
+      alert(`User ${newUser.firstName} updated successfully!`);
     };
 
     const shiftsPairs = computed(() => {
@@ -133,7 +187,7 @@ export default defineComponent({
     });
     const test = () => console.log(shiftsPairs.value);
 
-    return { user, removeUser, showUpdateUserSection, updatedUser, updateUserHandler, shifts, test, shiftsPairs };
+    return { user, removeUser, showUpdateUserSection, updatedUser, updateUserHandler, shifts, test, shiftsPairs, errorMessage };
   },
 });
 </script>
@@ -187,6 +241,7 @@ export default defineComponent({
           <input class="filter-input" v-model="updatedUser.email" />
         </div>
       </div>
+      <label style="color:red">{{errorMessage}}</label>
       <div>
         <button class="add-button" @click="updateUserHandler">Update User</button>
         <button class="remove-button" @click="removeUser">Remove User</button>
